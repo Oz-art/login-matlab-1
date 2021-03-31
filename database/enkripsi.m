@@ -1,9 +1,9 @@
 clear all
-secretKey = "kuncirahasia";
+secretKey = "kuncirahasiafinger";
 algorithm = "MD5";
 aes = AES(secretKey, algorithm);
 
-originalString = "dalton123";
+originalString = "edward404";
 encryptedString = aes.encrypt(originalString);
 decryptedString = aes.decrypt(encryptedString) ; 
 

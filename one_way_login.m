@@ -113,16 +113,16 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-user_role=0;
+
 username = get(handles.edit3,'String');
 
 radioButton1State = get(handles.radiobutton1, 'Value');
 radioButton2State = get(handles.radiobutton2, 'Value');
 if radioButton1State 
-  user_role = 1;
+  user_role = 'user';
 end
 if radioButton2State 
-  user_role = 0;
+  user_role = 'admin';
 end
 
 global password
@@ -141,9 +141,10 @@ aes = AES(secretKey, algorithm);
 pass_enkrip = aes.encrypt(pass);
 n_data = size(T,1);
 flag=0;
+
 for i=1:n_data
     role = T{i,9};
-    if role=='admin'
+    if role==user_role
         user_temp = T{i,2};
         pass_temp=T{i,4};
         if (user_temp==username & pass_temp == pass_enkrip)
