@@ -1,6 +1,6 @@
 clear all
 
-data_fitur = csvread('finger_extract.csv',1);
+data_fitur = csvread('face_extract.csv',1);
 fitur = data_fitur(:,2:end);
 label = data_fitur(:,1);
 
@@ -9,7 +9,7 @@ c = fitcknn(fitur,label,'NumNeighbors',1,...
     'NSMethod','exhaustive','Distance','euclidean',...
     'Standardize',1); 
 
-save model_finger c
+save model_face c
 
 % img = imread('face/1 (1).jpg');
 % img = rgb2gray(img);

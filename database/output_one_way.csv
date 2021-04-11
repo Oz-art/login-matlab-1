@@ -1,0 +1,6 @@
+user,token,akurasi,waktu_pemrosesan,memori,kompleksitas
+dummy,345677,1,24,2,2
+edward,16485,1,0.000861,3342336,17.22
+charly,14985,1,0.002355,3731456,47.1
+jonson,16623,1,0.0016378,4177920,32.756
+dalton,15382,1,0.00221,3452928,44.2

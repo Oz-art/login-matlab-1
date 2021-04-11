@@ -140,9 +140,6 @@ if class==1
         user_id='charly128';
     elseif class==5
         user_id='dalton512';
-    elseif class==6
-        user_id='purwa888';
-    
 end
 
 
@@ -189,10 +186,10 @@ T2 = readtable('database/output_two_way.csv',opts2);
 
 outer.user = the_user;
 outer.token = string(sprintf("%d%d",flag,random_t));
-outer.akurasi=((akurasi+out.akurasi)/2);
-outer.waktu_pemrosesan=waktu+out.waktu_pemrosesan;
-outer.memori=memory_used+out.memori;
-outer.kompleksitas=complexs+out.kompleksitas
+outer.akurasi=string(akurasi+out.akurasi);
+outer.waktu_pemrosesan=waktu;
+outer.memori=memory_used;
+outer.kompleksitas=string(complexs)
 
 db_vector = struct2table(outer);
 
@@ -275,7 +272,6 @@ for i=1:n_data
         if (user_temp==username & pass_temp == pass_enkrip)
             the_user = T{i,3};
             flag=1;
-            akurasi=1;
             break;
         end
 end
@@ -310,7 +306,7 @@ out.token = string(sprintf("%d%d",flag,random_t));
 out.akurasi=akurasi;
 out.waktu_pemrosesan=waktu;
 out.memori=memory_used;
-out.kompleksitas=complexs
+out.kompleksitas=string(complexs)
 
 
 

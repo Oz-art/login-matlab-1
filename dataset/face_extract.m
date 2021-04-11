@@ -1,7 +1,7 @@
 path_dataset = 'face/';
 fitur=[];
 
-for i=1:5
+for i=1:6
     img = imread(sprintf('%s1 (%d).jpg',path_dataset,i));
     img = rgb2gray(img);
     glcm = graycomatrix(img,'Offset',[2 0]);
@@ -20,6 +20,8 @@ for i=1:5
         class=4;
     elseif i==5
         class=5;
+    elseif i==6
+        class=6
     end
     temp_fitur=[class contrast homogeneity correlation energy];
     fitur = [fitur; temp_fitur];

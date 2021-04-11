@@ -116,14 +116,14 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 
 username = get(handles.edit3,'String');
 
-radioButton1State = get(handles.radiobutton1, 'Value');
-radioButton2State = get(handles.radiobutton2, 'Value');
-if radioButton1State 
-  user_role = 'user';
-end
-if radioButton2State 
-  user_role = 'admin';
-end
+% radioButton1State = get(handles.radiobutton1, 'Value');
+% radioButton2State = get(handles.radiobutton2, 'Value');
+% if radioButton1State 
+%   user_role = 'user';
+% end
+% if radioButton2State 
+%   user_role = 'admin';
+% end
 
 global password
 pass = password;
@@ -142,27 +142,63 @@ pass_enkrip = aes.encrypt(pass);
 n_data = size(T,1);
 flag=0;
 
+[user,sys] = memory;
+tic
+akurasi=0;
 for i=1:n_data
-    role = T{i,9};
-    if role==user_role
         user_temp = T{i,2};
         pass_temp=T{i,4};
         if (user_temp==username & pass_temp == pass_enkrip)
             the_user = T{i,3};
             flag=1;
+            akurasi=1
             break;
         end
-    end
 end
 
+waktu=toc
 if flag==1
     msg = sprintf('Selamat datang %s. Anda berhasil login',the_user);
     msgbox(msg,'Output Params');
 else
     msg = sprintf('Maaf username atau password anda tidak terdaftar');
     msgbox(msg,'Output Params');
+    
 end
-        
+[user2,sys2] = memory;
+memory_used=abs(user2.MemAvailableAllArrays-user.MemAvailableAllArrays);
+
+size_ones = uint8([1 waktu*10000])
+
+compx=ones(size_ones);
+
+[complex,~] = calc_lz_complexity(compx,'primitive',0);
+complexs = (complex)*(waktu*10000);
+random_t=randi(9,2);
+random_t=reshape(random_t,[1,4]);
+
+
+
+
+% db_vector = [the_user string(token) string(akurasi) string(waktu) string(memory_used) string(complex)]
+
+opts2 = detectImportOptions('database/output_one_way.csv','TextType','string');
+T2 = readtable('database/output_one_way.csv',opts2);
+% db_vector=table(db_vector);
+
+
+out.user = the_user;
+out.token = string(sprintf("%d%d",flag,random_t));
+out.akurasi=string(akurasi);
+out.waktu_pemrosesan=waktu;
+out.memori=memory_used;
+out.kompleksitas=string(complexs)
+
+db_vector = struct2table(out);
+
+T3 = [T2; db_vector];
+writetable(T3,'database/output_one_way.csv');
+
             
             
 

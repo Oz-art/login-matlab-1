@@ -3,7 +3,7 @@ secretKey = "kuncirahasiafinger";
 algorithm = "MD5";
 aes = AES(secretKey, algorithm);
 
-originalString = "edward404";
+originalString = "purwa888";
 encryptedString = aes.encrypt(originalString);
 decryptedString = aes.decrypt(encryptedString) ; 
 
@@ -12,6 +12,12 @@ decryptedString = aes.decrypt(encryptedString) ;
 % jonson = jonson123
 % charly = charly123
 % dalton = dalton123
+% purwa = purwa123
+
+% secret key
+% password = kuncirahasia
+% face = kuncirahasiaface
+% finger = kuncirahasiafinger
 
 %  if i==1
 %         class='Nickey';
