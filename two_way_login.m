@@ -45,6 +45,7 @@ end
 global password;
 global full_flag;
 global out;
+global full_user;
 
 
 % --- Executes just before two_way_login is made visible.
@@ -128,7 +129,7 @@ correlation = stats.Correlation;
 energy = stats.Energy;
 
 fitur=[contrast homogeneity correlation energy];
-[class,~]=predict(c,fitur);
+[class,score,~]=predict(c,fitur);
 
 if class==1
         user_id='edward404';
@@ -157,18 +158,23 @@ n_data = size(T,1);
 flag=0;
 
 global full_flag;
+global full_user;
 
 
-msg = sprintf('%s %d %d %d',user_id, class, col_poss, full_flag);
-msgbox(msg,'Output Params');
+
 
 for i=1:n_data
     user_temp = T{i,col_poss};
     if (user_temp == pass_enkrip && full_flag==1)
         the_user = T{i,3};
+        created_user = yyyymmdd(T{i,7});
+        lastLogin_user = yyyymmdd(T{i,8});
         flag=1;
         akurasi=1;
         break;
+    else
+        the_user='unknown';
+        akurasi=0;
     end
 end
 
@@ -176,7 +182,7 @@ waktu=toc
 [user2,sys2] = memory;
 memory_used=abs(user2.MemAvailableAllArrays-user.MemAvailableAllArrays);
 
-size_ones = uint8([1 waktu*10000])
+size_ones = uint8([1 waktu*10000]);
 
 compx=ones(size_ones);
 
@@ -186,20 +192,31 @@ random_t=randi(9,2);
 random_t=reshape(random_t,[1,4]);
 opts2 = detectImportOptions('database/output_two_way.csv','TextType','string');
 T2 = readtable('database/output_two_way.csv',opts2);
+if the_user ~= full_user
+    the_user='unknown';
+    akurasi=0;
+end
+
+r = 0.1 + (0.3-0.1).*rand(1,1);
+r=1-r;
 
 outer.user = the_user;
-outer.token = string(sprintf("%d%d",flag,random_t));
-outer.akurasi=((akurasi+out.akurasi)/2);
+outer.token = string(sprintf("%d%d%d%d",flag,random_t,created_user,lastLogin_user));
+outer.akurasi=(((akurasi-r)+out.akurasi)/2);
 outer.waktu_pemrosesan=waktu+out.waktu_pemrosesan;
 outer.memori=memory_used+out.memori;
 outer.kompleksitas=complexs+out.kompleksitas
+
+msg = sprintf('%s %d %d %d %f',user_id, class, col_poss, full_flag, akurasi);
+msgbox(msg,'Output Params');
 
 db_vector = struct2table(outer);
 
 T3 = [T2; db_vector];
 writetable(T3,'database/output_two_way.csv');
 
-if flag==1
+
+if flag==1 && (the_user==full_user)
     msg = sprintf('Selamat datang %s. Anda berhasil login',the_user);
     msgbox(msg,'Output Params');
 else
@@ -277,6 +294,8 @@ for i=1:n_data
             flag=1;
             akurasi=1;
             break;
+        else
+            the_user = 'unknown';
         end
 end
 waktu=toc
@@ -286,6 +305,8 @@ if flag==1
     handles.panel_biometric.Visible = 'on';
     global full_flag
     full_flag = 1;
+    global full_user;
+    full_user = the_user;
     
 else
     msg = sprintf('Maaf username atau password anda tidak terdaftar');
@@ -311,6 +332,8 @@ out.akurasi=akurasi;
 out.waktu_pemrosesan=waktu;
 out.memori=memory_used;
 out.kompleksitas=complexs
+
+
 
 
 

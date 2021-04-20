@@ -150,14 +150,11 @@ for i=1:n_data
         pass_temp=T{i,4};
         if (user_temp==username & pass_temp == pass_enkrip)
             the_user = T{i,3};
-            created_user = yyyymmdd(T{i,7});
-            lastLogin_user = yyyymmdd(T{i,8});
             flag=1;
-            akurasi=1;
+            akurasi=1
             break;
-        else
-            the_user = 'unknown';
-        end
+        else (the_user = 'unknown')
+            e
 end
 
 waktu=toc
@@ -183,6 +180,7 @@ random_t=reshape(random_t,[1,4]);
 
 
 
+
 % db_vector = [the_user string(token) string(akurasi) string(waktu) string(memory_used) string(complex)]
 
 opts2 = detectImportOptions('database/output_one_way.csv','TextType','string');
@@ -191,7 +189,7 @@ T2 = readtable('database/output_one_way.csv',opts2);
 
 
 out.user = the_user;
-out.token = string(sprintf("%d%d%d%d",flag,random_t,created_user,lastLogin_user));
+out.token = string(sprintf("%d%d",flag,random_t));
 out.akurasi=string(akurasi);
 out.waktu_pemrosesan=waktu;
 out.memori=memory_used;
